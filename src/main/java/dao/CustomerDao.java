@@ -31,6 +31,7 @@ public class CustomerDao extends BasicDao<Long, Customer> {
 		return super.get(propertyName, value);
 	}
 
+
 	@Override
 	public List<Customer> list() {
 		return super.list();
