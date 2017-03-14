@@ -13,8 +13,6 @@ public class Main {
 
     public static void main(String[] args) {
         ConsoleHelper consoleHelper = new ConsoleHelper();
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("aplication-context.xml");
-        Main main = applicationContext.getBean(Main.class);
         consoleHelper.displayStartMenu();
     }
 
