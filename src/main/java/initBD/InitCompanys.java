@@ -4,7 +4,6 @@ import main.java.dao.CompanyDao;
 import main.java.dao.ProjectDao;
 import main.java.model.Company;
 import main.java.model.Project;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +13,10 @@ public class InitCompanys {
     CompanyDao companyDao;
     ProjectDao projectDao;
 
-    @Transactional
     public void removeCompanys(){
         companyDao.removeALL();
     }
 
-    @Transactional
     public void addCompanys(){
         Company luxoft = new Company();
         luxoft.setName("Luxoft");

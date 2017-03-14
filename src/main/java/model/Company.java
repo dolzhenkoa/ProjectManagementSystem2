@@ -34,6 +34,10 @@ public class Company extends BasicEntity {
 		this.city = city;
 	}
 
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
 	public String getAddress() {
 		return address;
 	}
