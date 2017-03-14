@@ -1,4 +1,4 @@
-package view;
+package main.java.view;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,11 +8,11 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dao.CompanyDao;
-import dao.ProjectDao;
+import main.java.dao.CompanyDao;
+import main.java.dao.ProjectDao;
 
-import model.Company;
-import utils.HibernateUtil;
+import main.java.model.Company;
+import main.java.utils.HibernateUtil;
 
 public class CompanyView extends View {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyView.class);

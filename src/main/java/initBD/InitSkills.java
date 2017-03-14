@@ -1,8 +1,9 @@
-package initBD;
+package main.java.initBD;
 
 
-import dao.SkillDao;
-import model.Skill;
+import main.java.dao.SkillDao;
+import main.java.model.Skill;
+
 
 public class InitSkills {
     private SkillDao skillDao;

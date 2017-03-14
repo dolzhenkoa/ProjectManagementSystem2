@@ -1,8 +1,8 @@
-package dao;
+package main.java.dao;
 
 import org.hibernate.SessionFactory;
 
-import model.Developer;
+import main.java.model.Developer;
 
 public class DeveloperDao extends BasicDao<Long, Developer> {
 	

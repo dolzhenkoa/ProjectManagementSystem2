@@ -1,8 +1,8 @@
-package initBD;
+package main.java.initBD;
 
 
-import dao.CustomerDao;
-import model.Customer;
+import main.java.dao.CustomerDao;
+import main.java.model.Customer;
 
 public class InitCustoner {
     CustomerDao customerDao;

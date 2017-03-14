@@ -1,13 +1,13 @@
-package view;
+package main.java.view;
 
-import model.Skill;
-import utils.HibernateUtil;
+import main.java.model.Skill;
+import main.java.utils.HibernateUtil;
 
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dao.SkillDao;
+import main.java.dao.SkillDao;
 
 import java.io.BufferedReader;
 import java.io.IOException;

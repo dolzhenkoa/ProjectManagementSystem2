@@ -1,10 +1,10 @@
-package view;
+package main.java.view;
 
-import dao.DeveloperDao;
-import dao.SkillDao;
-import model.Developer;
-import model.Skill;
-import utils.HibernateUtil;
+import main.java.dao.DeveloperDao;
+import main.java.dao.SkillDao;
+import main.java.model.Developer;
+import main.java.model.Skill;
+import main.java.utils.HibernateUtil;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

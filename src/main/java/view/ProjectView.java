@@ -1,9 +1,9 @@
-package view;
+package main.java.view;
 
-import dao.ProjectDao;
+import main.java.dao.ProjectDao;
 
-import model.*;
-import utils.HibernateUtil;
+import main.java.model.*;
+import main.java.utils.HibernateUtil;
 
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;

@@ -26,11 +26,11 @@
 				
 		<!-- Hibernate mapping --> 
 			
-		<mapping class="model.Company" />
-		<mapping class="model.Customer" />
-		<mapping class="model.Developer" />
-		<mapping class="model.Project" />
-		<mapping class="model.Skill" />
+		<mapping class="main.java.model.Company" />
+		<mapping class="main.java.model.Customer" />
+		<mapping class="main.java.model.Developer" />
+		<mapping class="main.java.model.Project" />
+		<mapping class="main.java.model.Skill" />
 				
 	</session-factory>
 </hibernate-configuration>

@@ -1,5 +1,5 @@
-package view;
-import initBD.*;
+package main.java.view;
+import main.java.initBD.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

@@ -1,8 +1,8 @@
-package view;
+package main.java.view;
 
-import dao.CustomerDao;
-import model.Customer;
-import utils.HibernateUtil;
+import main.java.dao.CustomerDao;
+import main.java.model.Customer;
+import main.java.utils.HibernateUtil;
 
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;

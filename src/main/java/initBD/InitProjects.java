@@ -1,8 +1,8 @@
-package initBD;
+package main.java.initBD;
 
 
-import dao.ProjectDao;
-import model.Project;
+import main.java.dao.ProjectDao;
+import main.java.model.Project;
 
 public class InitProjects {
     private ProjectDao projectDao;

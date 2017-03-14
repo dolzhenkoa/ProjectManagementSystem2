@@ -1,8 +1,8 @@
-package dao;
+package main.java.dao;
 
 import org.hibernate.SessionFactory;
 
-import model.Company;
+import main.java.model.Company;
 
 import java.util.List;
 

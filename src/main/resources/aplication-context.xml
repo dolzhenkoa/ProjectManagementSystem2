@@ -5,7 +5,7 @@
 	                       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
 default-autowire="byName">
 
-        <bean id="main" class="view.Main" init-method="init">
+        <bean id="main" class="main.java.view.Main" init-method="init">
                 <property name="reInit" value="true"/>
         </bean>
 

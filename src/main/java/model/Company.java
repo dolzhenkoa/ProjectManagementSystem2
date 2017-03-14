@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="COMPANIES")
-public class Company extends model.BasicEntity {
+public class Company extends BasicEntity {
 	
 	@Column(name = "ADDRESS", length=250)
 	private String address;

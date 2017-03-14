@@ -1,8 +1,8 @@
-package dao;
+package main.java.dao;
 
 import org.hibernate.SessionFactory;
 
-import model.Customer;
+import main.java.model.Customer;
 
 public class CustomerDao extends BasicDao<Long, Customer> {
 	

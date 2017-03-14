@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ public class Skill extends BasicEntity {
 	@OneToOne(targetEntity = Developer.class)
 	private Developer developer;
 	
-	@Column(name="DISCRIPTION", length=250)
+	@Column(name="DESCRIPTION", length=250)
 	private String description;
 
     public Skill(String description) {

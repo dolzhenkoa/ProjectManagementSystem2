@@ -1,9 +1,9 @@
-package initBD;
+package main.java.initBD;
 
-import dao.CompanyDao;
-import dao.ProjectDao;
-import model.Company;
-import model.Project;
+import main.java.dao.CompanyDao;
+import main.java.dao.ProjectDao;
+import main.java.model.Company;
+import main.java.model.Project;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;

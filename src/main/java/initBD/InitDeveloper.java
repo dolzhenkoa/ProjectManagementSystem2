@@ -1,8 +1,8 @@
-package initBD;
+package main.java.initBD;
 
 
-import dao.DeveloperDao;
-import model.Developer;
+import main.java.dao.DeveloperDao;
+import main.java.model.Developer;
 
 import java.util.Date;
 
