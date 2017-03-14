@@ -2,15 +2,11 @@ package model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="COMPANIES")
-public class Company extends BasicEntity {
+public class Company extends model.BasicEntity {
 	
 	@Column(name = "ADDRESS", length=250)
 	private String address;
@@ -22,6 +18,11 @@ public class Company extends BasicEntity {
 	private String city;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="company")
+	@JoinTable(
+			name = "comp_to_proj",
+			joinColumns = @JoinColumn(name = "comp_id"),
+			inverseJoinColumns = @JoinColumn(name = "proj_id")
+	)
 	private List<Project> projects;
 	
 	public Company() { }
