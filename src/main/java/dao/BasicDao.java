@@ -68,7 +68,10 @@ public abstract class BasicDao<PK extends Serializable, T> {
     }  
   
     public void clear() {  
-        getSession().clear();  
+        getSession().clear();
     }  
  
+    public void removeALL() {
+        getSession().createQuery(" delete from " +persistentClass).executeUpdate();
+    }
 }
