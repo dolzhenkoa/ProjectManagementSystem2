@@ -2,19 +2,26 @@ package main.java.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name="PROJECTS")
+@Table(name = "PROJECTS")
 public class Project extends BasicEntity {
-	@OneToOne(targetEntity = Company.class)
-	private Company company;
-	
-	@Column(name="DISCRIPTION", length=250)
-	private String description;
+    @OneToOne(targetEntity = Company.class)
+    private Company company;
+
+
+    @OneToMany
+    @JoinTable(
+            name = "dev_projects",
+            joinColumns =
+            @JoinColumn(name = "id"),
+            inverseJoinColumns =
+            @JoinColumn(name = "project_id"))
+
+
+    @Column(name = "DISCRIPTION", length = 250)
+    private String description;
 
     public Project() {
     }
