@@ -26,5 +26,11 @@ public abstract class BasicEntity {
 	public Long getId() {
 		return id;
 	}
-	
+
+	@Override
+	public String toString() {
+		return 	"id=" + id +
+				", name='" + name + '\'' +
+				'}';
+	}
 }
