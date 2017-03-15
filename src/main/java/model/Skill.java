@@ -8,31 +8,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="SKILLS")
 public class Skill extends BasicEntity {
-	@OneToOne(targetEntity = Developer.class)
-	private Developer developer;
-	
-	@Column(name="DESCRIPTION", length=250)
-	private String description;
-
-    public Skill(String description) {
-    	this.description = description;
-    }
-
-    public Skill() { }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     @Override
     public String toString() {
-        return "Skill{" +
-                "id=" + getId() +
-                ", description='" + description + '\'' +
-                '}';
+        return "Skill{" + super.toString();
     }
 }
