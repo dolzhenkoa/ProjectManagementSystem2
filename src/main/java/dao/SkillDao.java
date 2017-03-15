@@ -54,7 +54,7 @@ public class SkillDao extends BasicDao<Long, Skill> {
         session.beginTransaction();
         session.save(entity);
         session.getTransaction().commit();
-        LOGGER.info("Skill : " + entity + " successfully save to DB.");
+        LOGGER.info("Skill : " + entity + " successfully saved to DB.");
         session.close();
     }
 
