@@ -12,11 +12,13 @@ import main.java.dao.SkillDao;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 class SkillView extends View {
     private static final Logger LOGGER = LoggerFactory.getLogger(SkillView.class);
 
-    private SessionFactory sessionFactory=HibernateUtil.getSessionFactory();
+    private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static String input;
     private SkillDao skillDAO = new SkillDao(sessionFactory);
@@ -25,7 +27,6 @@ class SkillView extends View {
         int choice = 0;
         printLine();
         System.out.println("Please select option:");
-        System.out.println("0 - Display find by name");
         System.out.println("1 - Display all available skills");
         System.out.println("2 - Insert new skill");
         System.out.println("3 - Update skill by ID");
@@ -51,9 +52,7 @@ class SkillView extends View {
             displaySkillMenu();
         }
 
-        if (choice == 0) {
-        	displayFindByName();
-        } else if(choice == 1) {
+        if (choice == 1) {
             displayAll();
         } else if (choice == 2) {
             insertSkill();
@@ -71,23 +70,17 @@ class SkillView extends View {
     }
 
     private void displayAll() {
-        skillDAO.getAll().stream().sorted((s1, s2) -> s1.getId() - s2.getId()).forEach(System.out::println);
+        List<Skill> list = new ArrayList<>(skillDAO.getAll());
+        list.forEach(System.out::println);
         displaySkillMenu();
     }
 
-    private void displayFindByName() {
-    	try {
-    		System.out.print("Please enter Name: ");
-    		skillDAO.getList(reader.readLine()).stream().sorted((d1, d2) -> d1.getId() - d2.getId()).forEach(System.out::println);
-		} catch (IOException e) {
-			LOGGER.error("IOException occurred:" + e.getMessage());
-		}
-    	displaySkillMenu();
-    }
-    
+
     private void updateSkill() {
-        Skill skill = new Skill();
+        Skill skill;
         printLine();
+        List<Skill> list = new ArrayList<>(skillDAO.getAll());
+        list.forEach(System.out::println);
         System.out.print("Please enter skill ID to update: ");
         try {
             input = reader.readLine();
@@ -97,20 +90,24 @@ class SkillView extends View {
         }
 
         try {
-            skill.setId(Integer.valueOf(input));
-            System.out.print("Please input new description of skill:");
-            try {
-                input = reader.readLine();
-            } catch (IOException e) {
-                LOGGER.error("IOException occurred:" + e.getMessage());
+            skill = skillDAO.load(Long.valueOf(input));
+            if (skill != null) {
+                System.out.print("Please input new description of skill:");
+                try {
+                    input = reader.readLine();
+                    skill.setName(input);
+                } catch (IOException e) {
+                    LOGGER.error("IOException occurred:" + e.getMessage());
+                }
+                skillDAO.update(skill);
+
+            } else {
+                LOGGER.error("Fail to delete Skill with ID=" + input + ". No Skills with such ID in DB.");
+                System.out.println("No Skills with such ID in DB. Please try again.");
             }
-            skillDAO.update(skill);
         } catch (NumberFormatException e) {
             LOGGER.error("NumberFormatException occurred:" + e.getMessage());
             System.out.println("An incorrect value. Please try again.");
-        } catch (NoItemToUpdateException e) {
-            LOGGER.error("NoItemToUpdateException" + e.getMessage());
-            System.out.println("There is no skill to update with requested id:" + skill.getId());
         }
         displaySkillMenu();
     }
@@ -119,23 +116,12 @@ class SkillView extends View {
         printLine();
         Skill skill = new Skill();
         try {
-            System.out.print("Please enter ID of new skill: ");
-            input = reader.readLine();
-            skill.setId(Integer.valueOf(input));
             System.out.print("Please enter description of new skill: ");
             input = reader.readLine();
-            skill.setDescription(input);
-        } catch (NumberFormatException e) {
-            LOGGER.error("NumberFormatException occurred:" + e.getMessage());
-            System.out.println("An incorrect value. Please try again.");
+            skill.setName(input);
+            skillDAO.save(skill);
         } catch (IOException e) {
             LOGGER.error("IOException occurred:" + e.getMessage());
-        }
-
-        try {
-            skillDAO.save(skill);
-        } catch (ItemExistException e) {
-            System.out.print("Cannot add " + skill + ". There is already skill with id:" + skill.getId());
         }
         displaySkillMenu();
     }
@@ -149,12 +135,16 @@ class SkillView extends View {
             LOGGER.error("IOException occurred:" + e.getMessage());
         }
         try {
-            skillDAO.delete(skillDAO.getById(Integer.valueOf(input)));
+            Skill skill = skillDAO.load(Long.valueOf(input));
+            if (skill != null) {
+                skillDAO.delete(skill);
+            } else {
+                LOGGER.error("Fail to delete Skill with ID=" + input + ". No Skills with such ID in DB.");
+                System.out.println("No Skills with such ID in DB. Please try again.");
+            }
         } catch (NumberFormatException e) {
             LOGGER.error("NumberFormatException occurred:" + e.getMessage());
             System.out.println("An incorrect skill ID value. Please try again.");
-        } catch (DeleteException e) {
-            LOGGER.error(e.getMessage());
         }
         displaySkillMenu();
     }
