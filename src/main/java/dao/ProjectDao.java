@@ -1,6 +1,6 @@
 package main.java.dao;
 
-import main.java.model.Company;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectDao extends BasicDao<Long, Project> {
-	private SessionFactory sessionFactory ;
+	public ProjectDao(SessionFactory sessionFactory) {
+		setSession(sessionFactory);
+	}
 	private final static Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
 
 	@Override

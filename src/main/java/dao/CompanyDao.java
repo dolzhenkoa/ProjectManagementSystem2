@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompanyDao extends BasicDao<Long, Company> {
+	public CompanyDao(SessionFactory sessionFactory) {
+		setSession(sessionFactory);
+	}
 
-	private SessionFactory sessionFactory ;
 	private final static Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
 
 		@Override

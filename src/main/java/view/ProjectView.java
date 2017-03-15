@@ -1,5 +1,6 @@
 package main.java.view;
 
+import main.java.dao.CompanyDao;
 import main.java.dao.ProjectDao;
 
 import main.java.model.*;
@@ -15,16 +16,18 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class ProjectView extends View {
-    private static Logger logger = LoggerFactory.getLogger(Project.class);
-    
-    private SessionFactory sessionFactory=HibernateUtil.getSessionFactory();
+    private static final Logger LOGGER = LoggerFactory.getLogger(SkillView.class);
+
+    private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static String input;
+    private CompanyDao companyDao = new CompanyDao(sessionFactory);
+    private ProjectDao projectDao = new ProjectDao(sessionFactory);
+
 
     public void displayProjectsMenu() {
-
         boolean con = true;
-        ProjectDao dao = new ProjectDao(sessionFactory);
-        List<Project> items = dao.getAll();
+        List<Project> items = projectDao.list();
 
         System.out.println();
         while (con) {
@@ -85,29 +88,23 @@ public class ProjectView extends View {
 
     }
 
-    private static void createNewProject() {
-        ProjectDAOImpl dao = new ProjectDAOImpl();
+    private void createNewProject() {
         Project element = new Project();
         System.out.println("Input new name:");
         element.setName(readStr());
         System.out.println("Input new description:");
         element.setDescription(readStr());
-        try {
-            dao.save(element);
-        } catch (ItemExistException e) {
-            e.printStackTrace();
-        }
+        projectDao.save(element);
     }
 
-    private static void getProjectById() {
-        ProjectDAOImpl dao = new ProjectDAOImpl();
+    private void getProjectById() {
         System.out.println("Input id:");
-        int id = readInt();
+        Long id = Long.valueOf(readInt());
         System.out.print("Project with id = " + id + ": ");
-        System.out.println(dao.getById(id));
+        System.out.println(projectDao.getById(id));
     }
-
-    private static void deleteCustomerFromProject(Project element) {
+    //TODO Move to CustomerView
+    private void deleteCustomerFromProject(Project element) {
         ProjectCustomerDAOImpl dao2 = new ProjectCustomerDAOImpl();
         List<Customer> customers = dao2.getByProject(element);
         System.out.println("Project customers:");
@@ -120,7 +117,7 @@ public class ProjectView extends View {
             e.printStackTrace();
         }
     }
-
+    //TODO Move to CustomerView
     private static void addCustomerToProject(Project element) {
         CustomerDAOImpl dao2 = new CustomerDAOImpl();
         List<Customer> customers = dao2.getAll();
@@ -143,7 +140,7 @@ public class ProjectView extends View {
         }
     }
 
-
+    //TODO Move to DeveloperView
     static private Developer createDeveloper() {
         Developer developer = new Developer();
         try {
@@ -173,7 +170,7 @@ public class ProjectView extends View {
         return developer;
     }
 
-
+    //TODO Move to DeveloperView
     private static void addDeveloperToProject(Project project) {
         DeveloperDAOImpl developerDAO = new DeveloperDAOImpl();
         List<Developer> developers = developerDAO.getAll();
@@ -196,26 +193,16 @@ public class ProjectView extends View {
         }
     }
 
-    private static void updateProject(Project element) {
-        ProjectDAOImpl dao = new ProjectDAOImpl();
+    private void updateProject(Project element) {
         System.out.println("Input new name:");
         element.setName(readStr());
         System.out.println("Input new description:");
         element.setDescription(readStr());
-        try {
-            dao.update(element);
-        } catch (NoItemToUpdateException e) {
-            e.printStackTrace();
-        }
+        projectDao.update(element);
     }
 
-    private static void deleteProject(Project element) {
-        ProjectDAOImpl dao = new ProjectDAOImpl();
-        try {
-            dao.delete(element);
-        } catch (DeleteException e) {
-            System.out.println("Cannot delete a project");
-        }
+    private void deleteProject(Project element) {
+        projectDao.delete(element);
     }
 
     //TODO Move to CustomerView

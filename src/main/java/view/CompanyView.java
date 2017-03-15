@@ -3,7 +3,10 @@ package main.java.view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
+import main.java.model.Project;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +18,14 @@ import main.java.model.Company;
 import main.java.utils.HibernateUtil;
 
 public class CompanyView extends View {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyView.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SkillView.class);
 
-	private SessionFactory sessionFactory=HibernateUtil.getSessionFactory();
-    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    private String input;
-    private CompanyDao companyDAO = new CompanyDao(sessionFactory);
-    private ProjectDao projectDAO = new ProjectDao(sessionFactory);
-    
+    private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static String input;
+    private CompanyDao companyDao = new CompanyDao(sessionFactory);
+    private ProjectDao projectDao = new ProjectDao(sessionFactory);
+
 	public void displayCompanyMenu() {
 		int choice = 0;
         printLine();
@@ -83,18 +86,17 @@ public class CompanyView extends View {
     private void deleteProject() {
     	printLine();
        	try {
-            System.out.print("Please enter ID of company: ");
-            int companyId=Integer.valueOf(reader.readLine());
+//            System.out.print("Please enter ID of company: ");
+//            int companyId=Integer.valueOf(reader.readLine());
             System.out.print("Please enter ID of project: ");
-            int projectId=Integer.valueOf(reader.readLine());
-            
-            companyDAO.deletePrpject(companyDAO.getById(companyId), projectDAO.getById(projectId));
-        
+            long projectId=Long.valueOf(reader.readLine());
+
+
+            projectDao.delete(projectDao.getById(projectId));
+
        	} catch (NumberFormatException e) {
             LOGGER.error("NumberFormatException occurred:" + e.getMessage());
             System.out.println("An incorrect company ID value. Please try again.");
-        } catch (DeleteException e) {
-            LOGGER.error(e.getMessage());
         } catch (IOException e) {
         	LOGGER.error("IOException occurred:" + e.getMessage());
 		}
@@ -105,56 +107,61 @@ public class CompanyView extends View {
 		printLine();
        	try {
             System.out.print("Please enter ID of company: ");
-            int companyId=Integer.valueOf(reader.readLine());
+            Long companyId=Long.valueOf(reader.readLine());
             System.out.print("Please enter ID of project: ");
-            int projectId=Integer.valueOf(reader.readLine());
-            
-            companyDAO.addProject(companyDAO.getById(companyId), projectDAO.getById(projectId));
-        
+            Long projectId=Long.valueOf(reader.readLine());
+
+            Company companyToInsert = new Company();
+            companyToInsert = companyDao.getById(companyId);
+
+            Project projectIsInsert = new Project();
+            projectIsInsert = projectDao.getById(projectId);
+
+            List<Project> projectList = new ArrayList<>();
+            projectList.add(projectIsInsert);
+
+            companyToInsert.setProjects(projectList);
+
        	} catch (NumberFormatException e) {
             LOGGER.error("NumberFormatException occurred:" + e.getMessage());
             System.out.println("An incorrect company ID value. Please try again.");
         } catch (IOException e) {
         	LOGGER.error("IOException occurred:" + e.getMessage());
 		}
-        displayCompanyMenu();	
+        displayCompanyMenu();
 	}
 
 	private void displayProjectsAll() {
 		try {
 			System.out.print("Please enter ID of company: ");
-            companyDAO.getById(Integer.valueOf(reader.readLine())).getProjects().stream().forEach(System.out::println);
+			companyDao.getById(Long.valueOf(reader.readLine())).getProjects().stream().forEach(System.out::println);
+
 		} catch (IOException e) {
 			LOGGER.error("IOException occurred:" + e.getMessage());
 		}
-        displayCompanyMenu();	
+        displayCompanyMenu();
 	}
 
 	private void displayAll() {
-    	companyDAO.getAll().stream().sorted((d1, d2) -> d1.getId() - d2.getId()).forEach(System.out::println);
+    	List<Company> allCompanies = new ArrayList<>(companyDao.list());
+    	allCompanies.forEach(System.out::println);
         displayCompanyMenu();
     }
-    
+
     private void displayFindByName() {
     	try {
     		System.out.print("Please enter Name: ");
-			companyDAO.getList(reader.readLine()).stream().sorted((d1, d2) -> d1.getId() - d2.getId()).forEach(System.out::println);
+			companyDao.get("name", String.valueOf(reader.readLine()));
 		} catch (IOException e) {
 			LOGGER.error("IOException occurred:" + e.getMessage());
 		}
         displayCompanyMenu();
     }
-    
+
     private void insertCompany() {
         printLine();
         Company company = new Company();
         try {
-            System.out.print("Please enter ID of new company: ");
-            company.setId(Integer.valueOf(reader.readLine()));
-            if (companyDAO.isExistCompany(company.getId())) {
-                System.out.print("There is already company with id: " + company.getId());
-                displayCompanyMenu();
-            }
             System.out.print("Please enter Name of new company: ");
             company.setName(reader.readLine());
             System.out.print("Please enter Address of new company: ");
@@ -163,18 +170,13 @@ public class CompanyView extends View {
             company.setCountry(reader.readLine());
             System.out.print("Please enter City of new company: ");
             company.setCity(reader.readLine());
-            
-            try {
-                companyDAO.save(company);
-            } catch (ItemExistException e) {
-                System.out.print("Cannot add " + company + ". There is already company with id:" + company.getId());
-            }
+            companyDao.save(company);
         } catch (IOException e) {
             LOGGER.error("IOException occurred:" + e.getMessage());
         }
         displayCompanyMenu();
     }
-    
+
     private void getInput() {
         try {
             input = reader.readLine();
@@ -182,22 +184,22 @@ public class CompanyView extends View {
             LOGGER.error("IOException occurred:" + e.getMessage());
         }
     }
-    
+
     private void deleteCompany() {
         printLine();
         System.out.print("Please enter company ID to delete: ");
         getInput();
         try {
-        	companyDAO.delete(companyDAO.getById(Integer.valueOf(input)));
+            Company company = new Company();
+            company = companyDao.getById(Long.valueOf(input));
+            companyDao.delete(company);
         } catch (NumberFormatException e) {
             LOGGER.error("NumberFormatException occurred:" + e.getMessage());
             System.out.println("An incorrect company ID value. Please try again.");
-        } catch (DeleteException e) {
-            LOGGER.error(e.getMessage());
         }
         displayCompanyMenu();
     }
-    
+
     private void updateCompany() {
     	Company newCompany = new Company();
     	Company companyToUpdate;
@@ -205,13 +207,7 @@ public class CompanyView extends View {
         System.out.print("Please enter company ID to update: ");
         try {
             input = reader.readLine();
-            newCompany.setId(Integer.valueOf(input));
-            if (!companyDAO.isExistCompany(newCompany.getId())) {
-                System.out.println("There is no company to update with requested id:" + newCompany.getId());
-                displayCompanyMenu();
-            }
-            companyToUpdate = companyDAO.getById(newCompany.getId());
-
+            companyToUpdate = companyDao.getById(Long.valueOf(input));
             System.out.print("Current company name: \"" + companyToUpdate.getName()
                     + "\". New company name (enter \"-\" to leave current name): ");
             getInput();
@@ -248,8 +244,8 @@ public class CompanyView extends View {
                 newCompany.setCity(input);
             }
             getInput();
-            
-            companyDAO.update(newCompany);
+
+            companyDao.update(newCompany);
 
         } catch (IOException e) {
             LOGGER.error("IOException occurred:" + e.getMessage());
@@ -257,10 +253,8 @@ public class CompanyView extends View {
         } catch (NumberFormatException e) {
             LOGGER.error("NumberFormatException occurred:" + e.getMessage());
             System.out.println("An incorrect value. Please try again.");
-        } catch (NoItemToUpdateException e) {
-            LOGGER.error(e.getMessage());
         }
         displayCompanyMenu();
     }
-    
+
 }
